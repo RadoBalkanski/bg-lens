@@ -803,71 +803,68 @@ L.geoJSON(myGeoJson, {
               CURRENT LOCATION
   ================================================*/
 
-  
-
- // Активен бутон
+// Активен бутон
 function enableButton() {
-  var myButton = document.getElementById('myButton');
-  myButton.classList.remove('inactive');
-  myButton.classList.add('active');
-  myButton.setAttribute('onclick', 'sendMessage()');
+  var myButton = document.getElementById("myButton");
+  myButton.classList.remove("inactive");
+  myButton.classList.add("active");
+  myButton.setAttribute("onclick", "sendMessage()");
 }
 
 // Неактивен бутон
 function disableButton() {
-  var myButton = document.getElementById('myButton');
-  myButton.classList.remove('active');
-  myButton.classList.add('inactive');
-  myButton.removeAttribute('onclick');
+  var myButton = document.getElementById("myButton");
+  myButton.classList.remove("active");
+  myButton.classList.add("inactive");
+  myButton.removeAttribute("onclick");
 }
 
 //Локация на потребителя
 function getUserLocation() {
   let userMarker;
   if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-          function (position) {
-              var lat = position.coords.latitude;
-              var lon = position.coords.longitude;
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
 
-              
-              map.setView([lat, lon], 15);
-              userMarker = L.marker([lat, lon]).addTo(map);
-              userLat = lat; 
-              userLng = lon; 
+        map.setView([lat, lon], 15);
+        userMarker = L.marker([lat, lon]).addTo(map);
+        userLat = lat;
+        userLng = lon;
 
-              myGeoJson.features.forEach(function (feature) {
-                  if (feature.geometry.type === "Point") {
-                      var markerLatLng = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
-                      var distance = userMarker.getLatLng().distanceTo(markerLatLng);
-                      if (distance < circleRadiusMeters) {
-                          // Поп ъп
-                          var popupContent = "<button onclick='sendMessage()'>Ти си в  близост до забележителност!</button>";
+        myGeoJson.features.forEach(function (feature) {
+          if (feature.geometry.type === "Point") {
+            var markerLatLng = L.latLng(
+              feature.geometry.coordinates[1],
+              feature.geometry.coordinates[0]
+            );
+            var distance = userMarker.getLatLng().distanceTo(markerLatLng);
+            if (distance < circleRadiusMeters) {
+              // Поп ъп
+              var popupContent =
+                "<button onclick='sendMessage()'>Ти си в  близост до забележителност!</button>";
 
-                          
-                          userMarker.bindPopup(popupContent).openPopup();
-                        
-                          enableButton();
-                      }
-                  }
-              });
-          },
-          function (error) {
-              console.error("Error getting location:", error.message);
+              userMarker.bindPopup(popupContent).openPopup();
+
+              enableButton();
+            }
           }
-      );
+        });
+      },
+      function (error) {
+        console.error("Error getting location:", error.message);
+      }
+    );
   } else {
-      console.error("Geolocation is not supported by this browser.");
+    console.error("Geolocation is not supported by this browser.");
   }
 }
 getUserLocation();
 
 function sendMessage() {
-  window.location.href = "../Camera Page/cameraIndex.html";
+  window.location.href = "../CameraPage/cameraIndex.html";
 }
-
-
-
 
 /*==============================================
                   LAYER CONTROL
@@ -887,7 +884,6 @@ var overlayMaps = {
   "Polygon Data": polygonData,
   wms: wms,
 };
-
 
 L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
 
@@ -923,4 +919,3 @@ myGeoJson.features.forEach(function (feature) {
     circle.addTo(map);
   }
 });
-

@@ -771,42 +771,35 @@ var geojsonFeatureCollection = {
   ],
 };
 
-Date.prototype.getWeek = function() {
-    var onejan = new Date(this.getFullYear(), 0, 1);
-    return Math.ceil(((this - onejan) / 86400000 + onejan.getDay() + 1) / 7);
-  };
+Date.prototype.getWeek = function () {
+  var onejan = new Date(this.getFullYear(), 0, 1);
+  return Math.ceil(((this - onejan) / 86400000 + onejan.getDay() + 1) / 7);
+};
 
 // Настояща дата
 
 var currentDate = new Date();
 var currentWeek = currentDate.getWeek();
 
-
 var randomIndex = currentWeek % geojsonFeatureCollection.features.length;
-
 
 var randomPin = geojsonFeatureCollection.features[randomIndex];
 
-
 var coordinates = randomPin.geometry.coordinates;
 
-
 var marker = L.marker([coordinates[1], coordinates[0]]).addTo(map);
-
 
 var circleRadiusMeters = 500; // Радиус
 
 L.geoJSON(randomPin, {
   pointToLayer: function (feature, latlng) {
-   
     var circleOptions = {
-      color: "red", 
-      fillColor: "red", 
-      fillOpacity: 0.5, 
-      radius: circleRadiusMeters, 
+      color: "red",
+      fillColor: "red",
+      fillOpacity: 0.5,
+      radius: circleRadiusMeters,
     };
 
-    
     return L.circle(latlng, circleOptions);
   },
   onEachFeature: function (feature, layer) {
@@ -814,74 +807,70 @@ L.geoJSON(randomPin, {
   },
 }).addTo(map);
 
-
-
 /*==============================================
               CURRENT LOCATION
   ================================================*/
 
-  // Активен бутон
+// Активен бутон
 function enableButton() {
-  var myButton = document.getElementById('myButton');
-  myButton.classList.remove('inactive');
-  myButton.classList.add('active');
-  myButton.setAttribute('onclick', 'sendMessage()');
+  var myButton = document.getElementById("myButton");
+  myButton.classList.remove("inactive");
+  myButton.classList.add("active");
+  myButton.setAttribute("onclick", "sendMessage()");
 }
 
 // Неактивен бутон
 function disableButton() {
-  var myButton = document.getElementById('myButton');
-  myButton.classList.remove('active');
-  myButton.classList.add('inactive');
-  myButton.removeAttribute('onclick');
+  var myButton = document.getElementById("myButton");
+  myButton.classList.remove("active");
+  myButton.classList.add("inactive");
+  myButton.removeAttribute("onclick");
 }
 
 function getUserLocation() {
   let userMarker;
   if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-          function (position) {
-              var lat = position.coords.latitude;
-              var lon = position.coords.longitude;
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        var lat = position.coords.latitude;
+        var lon = position.coords.longitude;
 
-              
-              map.setView([lat, lon], 15);
-              userMarker = L.marker([lat, lon]).addTo(map);
-              userLat = lat; 
-              userLng = lon; 
+        map.setView([lat, lon], 15);
+        userMarker = L.marker([lat, lon]).addTo(map);
+        userLat = lat;
+        userLng = lon;
 
-              geojsonFeatureCollection.features.forEach(function (feature) {
-                  if (feature.geometry.type === "Point") {
-                      var markerLatLng = L.latLng(feature.geometry.coordinates[1], feature.geometry.coordinates[0]);
-                      var distance = userMarker.getLatLng().distanceTo(markerLatLng);
-                      if (distance < circleRadiusMeters) {
-                          
-                          var popupContent = "<button onclick='sendMessage()'>Ти си в  близост до забележителност!</button>";
+        geojsonFeatureCollection.features.forEach(function (feature) {
+          if (feature.geometry.type === "Point") {
+            var markerLatLng = L.latLng(
+              feature.geometry.coordinates[1],
+              feature.geometry.coordinates[0]
+            );
+            var distance = userMarker.getLatLng().distanceTo(markerLatLng);
+            if (distance < circleRadiusMeters) {
+              var popupContent =
+                "<button onclick='sendMessage()'>Ти си в  близост до забележителност!</button>";
 
-                          
-                          userMarker.bindPopup(popupContent).openPopup();
-                          
-                          enableButton();
-                      }
-                  }
-              });
-          },
-          function (error) {
-              console.error("Error getting location:", error.message);
+              userMarker.bindPopup(popupContent).openPopup();
+
+              enableButton();
+            }
           }
-      );
+        });
+      },
+      function (error) {
+        console.error("Error getting location:", error.message);
+      }
+    );
   } else {
-      console.error("Geolocation is not supported by this browser.");
+    console.error("Geolocation is not supported by this browser.");
   }
 }
 getUserLocation();
 
 function sendMessage() {
-  
-  window.location.href = "../Camera Page/cameraIndex.html";
+  window.location.href = "../CameraPage/cameraIndex.html";
 }
-
-
 
 /*==============================================
                   LAYER CONTROL
@@ -901,7 +890,6 @@ var overlayMaps = {
   "Polygon Data": polygonData,
   wms: wms,
 };
-
 
 L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
 
@@ -937,4 +925,3 @@ geojsonFeatureCollection.features.forEach(function (feature) {
     circle.addTo(map);
   }
 });
-
