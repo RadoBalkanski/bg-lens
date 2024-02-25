@@ -774,31 +774,17 @@ var geojsonFeatureCollection = {
 // Сегашна дата
 var currentDate = new Date();
 var currentMonth = currentDate.getMonth();
-
 var randomIndex = currentMonth % geojsonFeatureCollection.features.length;
-
-var randomPin = geojsonFeatureCollection.features[randomIndex];
-
-var coordinates = randomPin.geometry.coordinates;
+var currentFeature = geojsonFeatureCollection.features[randomIndex];
+var coordinates = currentFeature.geometry.coordinates;
+var circleRadiusMeters = 500; // Adjust the radius as needed
 
 var marker = L.marker([coordinates[1], coordinates[0]]).addTo(map);
-
-var circleRadiusMeters = 500; // Радиус
-
-L.geoJSON(randomPin, {
-  pointToLayer: function (feature, latlng) {
-    var circleOptions = {
-      color: "red",
-      fillColor: "red",
-      fillOpacity: 0.5,
-      radius: circleRadiusMeters,
-    };
-
-    return L.circle(latlng, circleOptions);
-  },
-  onEachFeature: function (feature, layer) {
-    layer.bindPopup(feature.properties.Name);
-  },
+L.circle([coordinates[1], coordinates[0]], {
+  color: "red",
+  fillColor: "#f03",
+  fillOpacity: 0.5,
+  radius: circleRadiusMeters,
 }).addTo(map);
 
 /*==============================================
@@ -822,35 +808,37 @@ function disableButton() {
 }
 
 function getUserLocation() {
-  let userMarker;
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       function (position) {
         var lat = position.coords.latitude;
         var lon = position.coords.longitude;
 
-        map.setView([lat, lon], 15);
-        userMarker = L.marker([lat, lon]).addTo(map);
-        userLat = lat;
-        userLng = lon;
-
-        geojsonFeatureCollection.features.forEach(function (feature) {
-          if (feature.geometry.type === "Point") {
-            var markerLatLng = L.latLng(
-              feature.geometry.coordinates[1],
-              feature.geometry.coordinates[0]
-            );
-            var distance = userMarker.getLatLng().distanceTo(markerLatLng);
-            if (distance < circleRadiusMeters) {
-              var popupContent =
-                "<button onclick='sendMessage()'>Ти си в  близост до забележителност!</button>";
-
-              userMarker.bindPopup(popupContent).openPopup();
-
-              enableButton();
-            }
-          }
+        var greenIcon = new L.Icon({
+          iconUrl:
+            "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
+          shadowUrl:
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41],
         });
+
+        map.setView([lat, lon], 15);
+        var userMarker = L.marker([lat, lon], { icon: greenIcon }).addTo(map);
+
+        // Check if the user's location is within the circle area of the current marker
+        var markerLatLng = L.latLng(coordinates[1], coordinates[0]);
+        var distance = userMarker.getLatLng().distanceTo(markerLatLng);
+
+        if (distance < circleRadiusMeters) {
+          // Enable the button and set the onclick event to sendMessage
+          enableButton();
+          var popupContent =
+            "<button onclick='sendMessage()'>Ти си в близост до забележителност!</button>";
+          userMarker.bindPopup(popupContent).openPopup();
+        }
       },
       function (error) {
         console.error("Error getting location:", error.message);
@@ -860,6 +848,7 @@ function getUserLocation() {
     console.error("Geolocation is not supported by this browser.");
   }
 }
+
 getUserLocation();
 
 function sendMessage() {
