@@ -848,12 +848,10 @@ function getUserLocation() {
         map.setView([lat, lon], 15);
         var userMarker = L.marker([lat, lon], { icon: greenIcon }).addTo(map);
 
-        // Check if the user's location is within the circle area of the current marker
         var markerLatLng = L.latLng(coordinates[1], coordinates[0]);
         var distance = userMarker.getLatLng().distanceTo(markerLatLng);
 
         if (distance < circleRadiusMeters) {
-          // Enable the button and set the onclick event to sendMessage
           enableButton();
           var popupContent =
             "<button onclick='sendMessage()'>Ти си в близост до забележителност!</button>";

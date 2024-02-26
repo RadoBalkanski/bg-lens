@@ -844,14 +844,13 @@ function getUserLocation() {
           popupAnchor: [1, -34],
           shadowSize: [41, 41],
         });
-        // Update map and show user marker
+
         map.setView([lat, lon], 15);
         if (userMarker) {
-          map.removeLayer(userMarker); // Ensure previous marker is removed
+          map.removeLayer(userMarker);
         }
         userMarker = L.marker([lat, lon], { icon: greenIcon }).addTo(map);
 
-        // Determine the "feature of the day"
         var currentDate = new Date();
         var currentDay = currentDate.getDate();
         var featureOfTheDayIndex =
@@ -859,7 +858,6 @@ function getUserLocation() {
         var featureOfTheDay =
           geojsonFeatureCollection.features[featureOfTheDayIndex];
 
-        // Check if user is within the radius of the "feature of the day"
         var featureLatLng = L.latLng(
           featureOfTheDay.geometry.coordinates[1],
           featureOfTheDay.geometry.coordinates[0]
@@ -867,14 +865,12 @@ function getUserLocation() {
         var distance = userMarker.getLatLng().distanceTo(featureLatLng);
 
         if (distance < circleRadiusMeters) {
-          // User is within the feature of the day's circle radius
           var popupContent =
             "<button onclick='sendMessage()'>Ти си в близост до забележителност!</button>";
           userMarker.bindPopup(popupContent).openPopup();
-          enableButton(); // Make sure this function enables the button properly
+          enableButton();
         } else {
-          // User is not within the radius; ensure button is disabled or hidden
-          disableButton(); // Adjust this function as needed
+          disableButton();
         }
       },
       function (error) {
