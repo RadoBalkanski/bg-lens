@@ -786,10 +786,10 @@ L.geoJSON(myGeoJson, {
   pointToLayer: function (feature, latlng) {
     // Маркери на областите
     var circleOptions = {
-      color: "red", // Change color as needed
-      fillColor: "red", // Change fill color as needed
-      fillOpacity: 0.5, // Change fill opacity as needed
-      radius: circleRadiusMeters, // Use constant radius in meters
+      color: "red",
+      fillColor: "red",
+      fillOpacity: 0.5,
+      radius: circleRadiusMeters,
     };
 
     return L.circle(latlng, circleOptions);

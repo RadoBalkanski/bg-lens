@@ -134,7 +134,7 @@ body {
 
 
 
-/* Define styles for the button */
+
 a#myButton {
   display: inline-block;
   padding: 10px 20px;
@@ -145,15 +145,15 @@ a#myButton {
 }
 
 a#myButton.inactive {
-  background-color: #aaa; /* Gray background */
+  background-color: #aaa; 
 }
 
 a#myButton.active {
-  background-color: #80b980; /* Green background */
+  background-color: #80b980; 
 }
 
 
-/* Media query for screens smaller than 600px */
+
 @media screen and (max-width: 600px) {
   .sidebar {
     width: 100%;
