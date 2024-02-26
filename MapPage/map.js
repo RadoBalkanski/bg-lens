@@ -779,7 +779,7 @@ L.geoJSON(myGeoJson, {
   },
 }).addTo(map);
 
-var circleRadiusMeters = 500; // Радиус
+var circleRadiusMeters = 1000; // Радиус
 
 // GeoJSON маркери
 L.geoJSON(myGeoJson, {
