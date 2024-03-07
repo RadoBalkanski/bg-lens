@@ -3,10 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="script.js" type="module"></script>
+    <script src="login.js"  type="module"></script>
     <title>Map Website</title>
-
+    
     <link rel="stylesheet" href="style.css" />
+    
   </head>
   <body>
     <nav>
@@ -14,34 +15,25 @@
     </nav>
     <header>
       <div class="section__container header__container">
-        <form>
-          <h1>Register</h1>
+            <form>
+              <h1>Login</h1>
 
-          <div class="input-box">
-            <input type="text" placeholder="Username" id="username" required />
-            <i class="bx bxs-user"></i>
-          </div>
+              <div class="input-box">
+                <input type="email" placeholder="Email" id="email" required />
+                <i class="bx bxs-user"></i>
+              </div>
 
-          <div class="input-box">
-            <input type="email" placeholder="Email" id="email" required />
-            <i class="bx bxs-user"></i>
-          </div>
+              <div class="input-box">
+                <input type="password" placeholder="Password" id="password" required />
+                <i class="bx bxs-lock-alt"></i>
+              </div>
+              
+              <button id="submit" class="btn" type="submit">Login</button>
 
-          <div class="input-box">
-            <input
-              type="password"
-              placeholder="Password"
-              id="password"
-              required
-            />
-            <i class="bx bxs-lock-alt"></i>
-          </div>
+              <p>Don't have an account?</p>
+              <a href="index.html">Register</a>
 
-          <button id="submit" class="btn" type="submit">Register</button>
-
-          <p>Already have an account?</p>
-          <a href="login.html">Log In</a>
-        </form>
+            </form>
         <div class="header__content">
           <div>
             <h1>Обиколи България</h1>
@@ -57,5 +49,8 @@
         </div>
       </div>
     </header>
+    
+    
   </body>
+    
 </html>

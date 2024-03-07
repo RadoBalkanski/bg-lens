@@ -28,9 +28,7 @@ body {
     grid-template-columns: 1fr;
   }
 
-  .header__image {
-    padding: 20px;
-  }
+ 
 
   .header__content {
     padding: 20px;
@@ -40,7 +38,7 @@ body {
     width: 100%;
   }
 
-  .wrapper {
+  form {
     width: 100%;
     max-width: none;
   }
@@ -308,7 +306,7 @@ header {
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
 
-.wrapper {
+form {
   width: 420px;
   background: transparent;
   border: 2px solid rgba(255, 255, 255, 0.2);
@@ -319,16 +317,16 @@ header {
   padding: 30px 40px;
 }
 @media screen and (max-width: 600px) {
-  .wrapper {
+  form {
     max-width: 100%;
   }
 }
-.wrapper h1 {
+form h1 {
   font-size: 36px;
   text-align: left;
 }
 
-.wrapper .input-box {
+form .input-box {
   position: relative;
   width: 100%;
   height: 50px;
@@ -360,7 +358,7 @@ header {
   font-size: 20px;
 }
 
-.wrapper .remember-forgot {
+form .remember-forgot {
   display: flex;
   justify-content: space-between;
   font-size: 14.5px;
@@ -381,7 +379,7 @@ header {
   text-decoration: underline;
 }
 
-.wrapper .btn {
+form .btn {
   width: 100%;
   height: 45px;
   background: var(--primary-color);
@@ -395,7 +393,7 @@ header {
   font-weight: 600;
 }
 
-.wrapper .register-link {
+form .register-link {
   font-size: 14.5px;
   text-align: center;
   margin: 20px 0 15px;
