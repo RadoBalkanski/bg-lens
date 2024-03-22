@@ -1,5 +1,6 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import { getStorage, ref, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 const firebaseConfig = {
   apiKey: "AIzaSyCZmxo6qBWrpRPzDatTRY04bfKp8OGb3eA",
@@ -15,9 +16,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
-
-
+const storage = getStorage(app);
 
 const submit = document.getElementById('submit');
 
@@ -31,7 +30,6 @@ signInWithEmailAndPassword(auth, email, password)
 .then((userCredential) => {
   // Signed up 
   const user = userCredential.user;
-  window.location.href = "../ProfilePage/profileIndex.html";
   // ...
 })
 .catch((error) => {
@@ -39,6 +37,14 @@ signInWithEmailAndPassword(auth, email, password)
   const errorMessage = error.message;
   alert(errorMessage); // Display the error message
 });
+getDownloadURL(ref(storage, email))
+  .then((url) => {
+    const img = document.getElementById('myimg');
+    img.setAttribute('src', url);
+  })
+  .catch((error) => {
+    console.log(error)
+  });
 
 })
 

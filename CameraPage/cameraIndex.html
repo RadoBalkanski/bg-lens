@@ -31,5 +31,24 @@
     </div>
     <canvas id="canvas" style="display: none"></canvas>
     <script src="cameraScript.js"></script>
+    <script>
+      import { initializeApp } from "firebase/app";
+      import { getFirestore } from "firebase/firestore";
+      
+      
+      const firebaseConfig = {
+          apiKey: "AIzaSyCZmxo6qBWrpRPzDatTRY04bfKp8OGb3eA",
+          authDomain: "bglens-8cfc7.firebaseapp.com",
+          databaseURL: "https://bglens-8cfc7-default-rtdb.europe-west1.firebasedatabase.app",
+          projectId: "bglens-8cfc7",
+          storageBucket: "bglens-8cfc7.appspot.com",
+          messagingSenderId: "441776601954",
+          appId: "1:441776601954:web:33dea3f5247ebf7ca7ca3b",
+          measurementId: "G-YMGHHYPT9M"
+      };
+      
+      const app = initializeApp(firebaseConfig);
+      
+      const db = getFirestore(app);</script>
   </body>
 </html>

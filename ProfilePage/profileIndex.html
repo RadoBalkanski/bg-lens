@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>България през обектив</title>
+    <script  src="profileScript.js" type="module"></script>
     <link rel="stylesheet" href="profileStyle.css" />
     <!-- Icons -->
     <link
@@ -28,12 +29,11 @@
       <!-- Profile Image -->
       <div class="profile">
         <div class="profile-img">
-          <img src="../Resources/profileImg.jpg" />
+          <img src="" />
         </div>
         <div class="name">
-          <h1>Потребител</h1>
+          <h1 id="userName"></h1>
         </div>
-        <span>@user</span>
       </div>
       <!-- Menu -->
       <div class="menu">
@@ -120,30 +120,13 @@
             <div class="post-info">
                 <div class="post-profile">
                     <div class="post-img">
-                        <img src="../Resources/profileImg.jpg" alt="">
+                        <img src="" alt="">
                     </div>
                     <h3>user</h3>
                 </div>
             </div>
         </div>
     </div>
-    <script>
-      window.addEventListener("DOMContentLoaded", function () {
-    var photos = sessionStorage.getItem("capturedPhoto");
-    if (photos) {
-        var photoArray = photos.split("|");
-        var container = document.getElementById("postedPhotosContainer");
-        photoArray.forEach(function (photoUrl) {
-            if (photoUrl !== '') {
-                var newImg = document.createElement("img");
-                newImg.src = photoUrl;
-                container.appendChild(newImg);
-
-                document.querySelector('.post-info').style.display = 'block';
-            }
-        });
-    }
-});
-    </script>
+    
   </body>
 </html>

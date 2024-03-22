@@ -1,3 +1,12 @@
+document.addEventListener("DOMContentLoaded", function () {
+  // Retrieve the profile image URL from sessionStorage
+  const profileImageUrl = sessionStorage.getItem('profileImageUrl');
+  if (profileImageUrl) {
+    // Set the profile image source
+    const profileImgElement = document.querySelector('.profile-img img');
+    profileImgElement.setAttribute('src', profileImageUrl);
+  }
+});
 // Map initialization
 var map = L.map("map").setView([42.7339, 25.4858], 8);
 
@@ -777,7 +786,7 @@ var currentMonth = currentDate.getMonth();
 var randomIndex = currentMonth % geojsonFeatureCollection.features.length;
 var currentFeature = geojsonFeatureCollection.features[randomIndex];
 var coordinates = currentFeature.geometry.coordinates;
-var circleRadiusMeters = 500;
+var circleRadiusMeters = 250;
 
 var marker = L.marker([coordinates[1], coordinates[0]]).addTo(map);
 L.circle([coordinates[1], coordinates[0]], {

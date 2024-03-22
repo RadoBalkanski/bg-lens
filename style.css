@@ -24,9 +24,7 @@ body {
     font-size: 1.5rem;
   }
 
-  .header__container {
-    grid-template-columns: 1fr;
-  }
+  
 
  
 
@@ -198,12 +196,19 @@ header {
 }
 
 .header__container {
-  min-height: 100vh;
+  
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
+  align-items: center; /* Centers the items vertically */
+  justify-content: center; /* Centers the items horizontally */
+  gap: 2rem; /* Adds some space between the two items */
+  flex-wrap: wrap; /* Ensures responsiveness */
+  padding: 2rem; /* Add some padding */
+  padding-top: 200px;
+}
+
+form, .header__content {
+  flex: 1 1 45%; /* This allows each item to grow and shrink but start with 45% of the container's width */
+  max-width: 45%; /* Max-width to control the maximum size of the elements */
 }
 
 .header__image {
@@ -417,4 +422,8 @@ form .register-link {
   font-size: 1rem;
   color: var(--text-dark);
   max-width: calc(var(--max-width) / 2);
+}
+
+img{
+  max-width: 200px;
 }

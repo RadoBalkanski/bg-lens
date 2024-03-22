@@ -1,3 +1,6 @@
+
+
+
 (function() {
     var width = window.innerWidth;
     var height = window.innerHeight;
@@ -120,20 +123,33 @@
     }
 
     function postToFeed(capturedPhotoUrl) {
-        // Нова снимка
-        var newImg = document.createElement('img');
-        newImg.src = capturedPhotoUrl;
-        newImg.classList.add('posted-photo'); 
+        // Upload the image to Firebase Storage
+        var storageRef = firebase.storage().ref();
+        var imageName = 'image_' + Date.now() + '.png'; // Generate a unique image name
+        var imageRef = storageRef.child('images/' + imageName);
     
-        // Нов див за снимка
-        var newPostBox = document.createElement('div');
-        newPostBox.classList.add('post-box');
-        newPostBox.appendChild(newImg);
-    
-        // Постове контейнер
-        var feedContainer = document.querySelector('.main-posts');
-        
-        feedContainer.insertBefore(newPostBox, feedContainer.firstChild);
+        fetch(capturedPhotoUrl)
+            .then(response => response.blob())
+            .then(blob => {
+                return imageRef.put(blob);
+            })
+            .then(snapshot => {
+                // Get the download URL of the uploaded image
+                return snapshot.ref.getDownloadURL();
+            })
+            .then(downloadURL => {
+                // Save the image metadata (including the download URL) to Firestore
+                return firebase.firestore().collection('posts').add({
+                    imageURL: downloadURL,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            })
+            .then(() => {
+                console.log('Image uploaded and metadata saved successfully.');
+            })
+            .catch(error => {
+                console.error('Error uploading image:', error);
+            });
     }
     
 

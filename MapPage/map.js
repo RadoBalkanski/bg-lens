@@ -1,3 +1,13 @@
+document.addEventListener("DOMContentLoaded", function () {
+  // Retrieve the profile image URL from sessionStorage
+  const profileImageUrl = sessionStorage.getItem("profileImageUrl");
+  if (profileImageUrl) {
+    // Set the profile image source
+    const profileImgElement = document.querySelector(".profile-img img");
+    profileImgElement.setAttribute("src", profileImageUrl);
+  }
+});
+
 // Map initialization
 var map = L.map("map").setView([42.7339, 25.4858], 8);
 
@@ -779,7 +789,7 @@ L.geoJSON(myGeoJson, {
   },
 }).addTo(map);
 
-var circleRadiusMeters = 1000; // Радиус
+var circleRadiusMeters = 250; // Радиус
 
 // GeoJSON маркери
 L.geoJSON(myGeoJson, {
