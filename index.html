@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
-    <script src="script.js"  type="module"></script>
+    <script src="script.js" type="module"></script>
     <script src="firestore.js"></script>
     <title>Map Website</title>
-    
+
     <link rel="stylesheet" href="style.css" />
-    
+    //cHAKAI CHE NESTO NE STANA
   </head>
   <body>
     <nav>
@@ -18,34 +18,38 @@
     </nav>
     <header>
       <div class="section__container header__container">
-            <form id="from">
-              <h1>Register</h1>
+        <form id="from">
+          <h1>Register</h1>
 
-              <div class="input-box">
-                <input type="text" placeholder="Username" id="username" required />
-                <i class="bx bxs-user"></i>
-              </div>
+          <div class="input-box">
+            <input type="text" placeholder="Username" id="username" required />
+            <i class="bx bxs-user"></i>
+          </div>
 
-              <div class="input-box">
-                <input type="email" placeholder="Email" id="email" required />
-                <i class="bx bxs-user"></i>
-              </div>
+          <div class="input-box">
+            <input type="email" placeholder="Email" id="email" required />
+            <i class="bx bxs-user"></i>
+          </div>
 
-              <div class="input-box">
-                <input type="password" placeholder="Password" id="password" required />
-                <i class="bx bxs-lock-alt"></i>
-              </div>
+          <div class="input-box">
+            <input
+              type="password"
+              placeholder="Password"
+              id="password"
+              required
+            />
+            <i class="bx bxs-lock-alt"></i>
+          </div>
 
-              <input type="file" id="image">
+          <input type="file" id="image" />
 
-              <img src="" alt="upload image" id="myimg">
-              
-              <button id="submit" class="btn" type="submit">Register</button>
+          <img src="" alt="upload image" id="myimg" />
 
-              <p>Already have an account?</p>
-              <a href="login.html">Log In</a>
+          <button id="submit" class="btn" type="submit">Register</button>
 
-            </form>
+          <p>Already have an account?</p>
+          <a href="login.html">Log In</a>
+        </form>
         <div class="header__content">
           <div>
             <h1>Обиколи България</h1>
@@ -54,15 +58,12 @@
             </p>
             <div class="btn">
               <a href="../ProfilePage/profileIndex.html"
-                ><h3>Get Started</h3></a>
+                ><h3>Get Started</h3></a
+              >
             </div>
           </div>
         </div>
       </div>
     </header>
-    
-    
-    
   </body>
-    
 </html>
