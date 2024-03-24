@@ -337,6 +337,24 @@ body {
   margin-left: 7px;
 }
 
+.sidebar {
+  position: fixed;
+  width: 300px;
+  height: 85vh;
+  background: #e6e6e6;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo {
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 @media screen and (max-width: 600px) {
   .sidebar {
     width: 100%;
