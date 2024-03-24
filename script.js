@@ -9,6 +9,13 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyCZmxo6qBWrpRPzDatTRY04bfKp8OGb3eA",
   authDomain: "bglens-8cfc7.firebaseapp.com",
@@ -25,6 +32,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const storage = getStorage(app);
+const db = getFirestore(app);
 
 const submit = document.getElementById("submit");
 
@@ -52,21 +60,16 @@ submit.addEventListener("click", function (event) {
         throw new Error("No file selected");
       }
     })
-    .then((snapshot) => {
-      console.log("Uploaded a blob or file!");
-
-      // Get the download URL for the uploaded file
-      return getDownloadURL(snapshot.ref);
-    })
+    .then((snapshot) => getDownloadURL(snapshot.ref))
     .then((url) => {
-      // Set the image src to the download URL
-      const img = document.getElementById("myimg");
-      img.setAttribute("src", url);
-      console.log("Download URL:", url);
-
-      sessionStorage.setItem("profileImageUrl", url);
-      // Redirect to the next page after successful registration and upload
-      // Replace "nextPage.html" with the URL of the next page you want to navigate to
+      // Here's the corrected part for setting a document in Firestore
+      return setDoc(doc(db, "users", auth.currentUser.uid), {
+        username: username,
+        profileImageUrl: url,
+      });
+    })
+    .then(() => {
+      console.log("User profile saved");
       window.location.href = "../ProfilePage/profileIndex.html";
     })
     .catch((error) => {

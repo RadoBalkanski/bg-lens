@@ -3,6 +3,12 @@ import {
   getAuth,
   signInWithEmailAndPassword,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyCZmxo6qBWrpRPzDatTRY04bfKp8OGb3eA",
   authDomain: "bglens-8cfc7.firebaseapp.com",
@@ -15,28 +21,39 @@ const firebaseConfig = {
   measurementId: "G-YMGHHYPT9M",
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app); // Initialize Firestore
 
 const submit = document.getElementById("submit");
 
-submit.addEventListener("click", function (event) {
+submit.addEventListener("click", async (event) => {
   event.preventDefault();
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed up
-      const user = userCredential.user;
-      window.location.href = "../ProfilePage/profileIndex.html";
-      // ...
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      alert(errorMessage); // Display the error message
-    });
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    if (userDoc.exists()) {
+      // Example: Storing user's name and profile image URL in sessionStorage
+      sessionStorage.setItem("username", userDoc.data().username);
+      sessionStorage.setItem("profileImageUrl", userDoc.data().profileImageUrl);
+      window.location.href = "../ProfilePage/profileIndex.html"; // Adjust as necessary
+    } else {
+      console.log("No user document found!");
+    }
+  } catch (error) {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    console.error("Login error:", errorMessage);
+    // Optionally, handle errors (e.g., wrong password, no user) here
+  }
 });
