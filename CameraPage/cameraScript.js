@@ -1,6 +1,8 @@
 
-
-
+import { db, app } from '../firebaseConfig.js';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+import { collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { uploadPost } from '../postUpload.js';
 (function() {
     var width = window.innerWidth;
     var height = window.innerHeight;
@@ -122,35 +124,31 @@
         a.click();
     }
 
-    function postToFeed(capturedPhotoUrl) {
-        // Upload the image to Firebase Storage
-        var storageRef = firebase.storage().ref();
-        var imageName = 'image_' + Date.now() + '.png'; // Generate a unique image name
-        var imageRef = storageRef.child('images/' + imageName);
     
-        fetch(capturedPhotoUrl)
-            .then(response => response.blob())
-            .then(blob => {
-                return imageRef.put(blob);
-            })
-            .then(snapshot => {
-                // Get the download URL of the uploaded image
-                return snapshot.ref.getDownloadURL();
-            })
-            .then(downloadURL => {
-                // Save the image metadata (including the download URL) to Firestore
-                return firebase.firestore().collection('posts').add({
-                    imageURL: downloadURL,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            })
-            .then(() => {
-                console.log('Image uploaded and metadata saved successfully.');
-            })
-            .catch(error => {
-                console.error('Error uploading image:', error);
-            });
+
+    async function postToFeed(capturedPhotoUrl) {
+        // Convert Data URL to Blob
+        const response = await fetch(capturedPhotoUrl);
+        const blob = await response.blob();
+        const file = new File([blob], "capturedImage.png", { type: "image/png" });
+        const caption = "Optional caption here"; // Modify based on your needs
+    
+        // Call uploadPost to upload the image and post data
+        try {
+            await uploadPost(file, caption);
+            console.log("Image posted successfully.");
+        } catch (error) {
+            console.error("Error posting image:", error);
+        }
     }
+
+    document.getElementById('postToFeedButton').addEventListener('click', function() {
+        const photo = document.getElementById('photo');
+        if (photo.src) {
+            postToFeed(photo.src);
+        }
+    });
+
     
 
     window.addEventListener('load', startup, false);

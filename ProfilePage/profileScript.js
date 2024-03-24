@@ -4,6 +4,7 @@ import {
   getFirestore,
   doc,
   getDoc,
+  collection, query, orderBy, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -115,3 +116,61 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+// FEED
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadProfileInfo();
+  loadRealTimePosts();
+});
+
+function loadProfileInfo() {
+  // User's profile information loading logic
+  const username = sessionStorage.getItem("username");
+  const profileImageUrl = sessionStorage.getItem("profileImageUrl");
+
+  if (username) {
+    document.getElementById("userName").textContent = username;
+  }
+
+  if (profileImageUrl) {
+    document.querySelector(".profile-img img").setAttribute("src", profileImageUrl);
+  }
+}
+
+function loadRealTimePosts() {
+  // Real-time posts loading logic
+  const postsQuery = query(collection(db, "posts"), orderBy("timestamp", "desc"));
+  onSnapshot(postsQuery, (querySnapshot) => {
+    const postsContainer = document.getElementById("postsContainer");
+    postsContainer.innerHTML = ''; // Clears existing posts and prepares for new ones
+    querySnapshot.forEach((doc) => {
+      const post = doc.data();
+      const postElement = createPostElement(post);
+      postsContainer.prepend(postElement); // Ensures newest posts are at the top
+    });
+  });
+}
+
+function createPostElement(post) {
+  // Function to create HTML elements for posts
+  const postElement = document.createElement('div');
+  postElement.classList.add('post');
+  
+  const img = document.createElement('img');
+  img.src = post.imageUrl; // Ensure this matches the field name in Firestore
+  img.alt = 'Posted image';
+  postElement.appendChild(img);
+
+  if (post.caption) {
+    const caption = document.createElement('p');
+    caption.textContent = post.caption;
+    postElement.appendChild(caption);
+  }
+
+  return postElement;
+}
+
