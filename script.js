@@ -14,7 +14,10 @@ import {
   doc,
   setDoc,
   getDoc,
-  collection, query, orderBy, onSnapshot
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
 } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -62,22 +65,24 @@ submit.addEventListener("click", function (event) {
       }
     })
     .then((snapshot) => getDownloadURL(snapshot.ref))
-.then((url) => {
-  // First, save the user's profile data to Firestore with the URL
-  return setDoc(doc(db, "users", auth.currentUser.uid), {
-    username: username,
-    profileImageUrl: url,
-  }).then(() => url); // Return url for the next .then()
-})
-.then((url) => { // The url is now accessible in this .then()
-  console.log("User profile saved");
-  // Store the profile image URL in sessionStorage
-  sessionStorage.setItem("profileImageUrl", url);
-  // Redirect to the profile page
-  window.location.href = "../ProfilePage/profileIndex.html";
-})
-.catch((error) => {
-  console.error("Error:", error);
-  alert(error.message);
-});
+    .then((url) => {
+      // First, save the user's profile data to Firestore with the URL
+      return setDoc(doc(db, "users", auth.currentUser.uid), {
+        username: username,
+        profileImageUrl: url,
+        dailyPoints: 0,
+      }).then(() => url); // Return url for the next .then()
+    })
+    .then((url) => {
+      // The url is now accessible in this .then()
+      console.log("User profile saved");
+      // Store the profile image URL in sessionStorage
+      sessionStorage.setItem("profileImageUrl", url);
+      // Redirect to the profile page
+      window.location.href = "../ProfilePage/profileIndex.html";
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert(error.message);
+    });
 });

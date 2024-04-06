@@ -348,6 +348,34 @@ body {
   align-items: center;
 }
 
+.points-box {
+  width: 100%;
+  background: #f9f9f9;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.points-box h2 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  text-align: center;
+  color: #486148;
+}
+
+.points-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.points-item:last-child {
+  margin-bottom: 0;
+}
+
 .logo {
   margin-top: 5px;
   display: flex;
