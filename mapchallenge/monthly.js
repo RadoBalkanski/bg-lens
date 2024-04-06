@@ -830,7 +830,7 @@ var currentMonth = currentDate.getMonth();
 var randomIndex = currentMonth % geojsonFeatureCollection.features.length;
 var currentFeature = geojsonFeatureCollection.features[randomIndex];
 var coordinates = currentFeature.geometry.coordinates;
-var circleRadiusMeters = 500000;
+var circleRadiusMeters = 250;
 
 var marker = L.marker([coordinates[1], coordinates[0]]).addTo(map);
 L.circle([coordinates[1], coordinates[0]], {

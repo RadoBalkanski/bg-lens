@@ -840,7 +840,7 @@ var coordinates = randomPin.geometry.coordinates;
 // Поставяне на маркер
 var marker = L.marker([coordinates[1], coordinates[0]]).addTo(map);
 
-var circleRadiusMeters = 250000; // Радиус
+var circleRadiusMeters = 250; // Радиус
 
 L.geoJSON(randomPin, {
   pointToLayer: function (feature, latlng) {
