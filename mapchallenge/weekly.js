@@ -880,6 +880,36 @@ function disableButton() {
   myButton.removeAttribute("onclick");
 }
 
+function increaseUserPoints(points) {
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+  const user = auth.currentUser;
+
+  if (!user) return; // Ensure the user is logged in
+
+  // Reference to the user's document in Firestore
+  const userRef = doc(db, "users", user.uid);
+
+  // Run transaction
+  runTransaction(db, async (transaction) => {
+    const userDoc = await transaction.get(userRef);
+    if (!userDoc.exists()) {
+      throw "Document does not exist!";
+    }
+
+    const userData = userDoc.data();
+    const newPoints = (userData.dailyPoints || 0) + points;
+    transaction.update(userRef, { dailyPoints: newPoints });
+    return newPoints; // This will be the resolved value of the promise returned by runTransaction
+  })
+    .then((newPoints) => {
+      console.log(`Points increased by ${points}. Total now: ${newPoints}`);
+    })
+    .catch((error) => {
+      console.error("Transaction failed: ", error);
+    });
+}
+
 function getUserLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -909,6 +939,7 @@ function getUserLocation() {
           var popupContent =
             "<button onclick='sendMessage()'>Ти си в близост до забележителност!</button>";
           userMarker.bindPopup(popupContent).openPopup();
+          increaseUserPoints(20);
         }
       },
       function (error) {

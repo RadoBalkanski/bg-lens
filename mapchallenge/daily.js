@@ -840,7 +840,7 @@ var coordinates = randomPin.geometry.coordinates;
 // Поставяне на маркер
 var marker = L.marker([coordinates[1], coordinates[0]]).addTo(map);
 
-var circleRadiusMeters = 250; // Радиус
+var circleRadiusMeters = 250000; // Радиус
 
 L.geoJSON(randomPin, {
   pointToLayer: function (feature, latlng) {
@@ -877,6 +877,36 @@ function disableButton() {
   myButton.classList.remove("active");
   myButton.classList.add("inactive");
   myButton.removeAttribute("onclick");
+}
+
+function increaseUserPoints(points) {
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+  const user = auth.currentUser;
+
+  if (!user) return; // Ensure the user is logged in
+
+  // Reference to the user's document in Firestore
+  const userRef = doc(db, "users", user.uid);
+
+  // Run transaction
+  runTransaction(db, async (transaction) => {
+    const userDoc = await transaction.get(userRef);
+    if (!userDoc.exists()) {
+      throw "Document does not exist!";
+    }
+
+    const userData = userDoc.data();
+    const newPoints = (userData.dailyPoints || 0) + points;
+    transaction.update(userRef, { dailyPoints: newPoints });
+    return newPoints; // This will be the resolved value of the promise returned by runTransaction
+  })
+    .then((newPoints) => {
+      console.log(`Points increased by ${points}. Total now: ${newPoints}`);
+    })
+    .catch((error) => {
+      console.error("Transaction failed: ", error);
+    });
 }
 
 function getUserLocation() {
@@ -918,10 +948,12 @@ function getUserLocation() {
         var distance = userMarker.getLatLng().distanceTo(featureLatLng);
 
         if (distance < circleRadiusMeters) {
+          enableButton();
           var popupContent =
             "<button onclick='sendMessage()'>Ти си в близост до забележителност!</button>";
           userMarker.bindPopup(popupContent).openPopup();
-          enableButton();
+
+          increaseUserPoints(15);
         } else {
           disableButton();
         }

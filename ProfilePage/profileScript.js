@@ -1,5 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
 import {
   getFirestore,
   doc,
@@ -127,21 +129,73 @@ document.addEventListener("DOMContentLoaded", () => {
   loadRealTimePosts();
 });
 
-function loadProfileInfo() {
-  // User's profile information loading logic
-  const username = sessionStorage.getItem("username");
-  const profileImageUrl = sessionStorage.getItem("profileImageUrl");
-
-  if (username) {
-    document.getElementById("userName").textContent = username;
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in, now fetch their profile data
+    loadProfileInfo(); // Now this is being called after confirming the user is signed in
+  } else {
+    // User is signed out
+    console.log("No user is signed in.");
+    // Optionally, redirect to login page
+    // window.location.href = "login.html";
   }
+});
 
-  if (profileImageUrl) {
-    document
-      .querySelector(".profile-img img")
-      .setAttribute("src", profileImageUrl);
+// This function will be called when the DOM is fully loaded
+function loadProfileInfo() {
+  const auth = getAuth();
+  const db = getFirestore();
+  const user = auth.currentUser;
+
+  if (user) {
+    // User is signed in, now fetch their profile data
+    const userRef = doc(db, "users", user.uid);
+    getDoc(userRef)
+      .then((docSnap) => {
+        if (docSnap.exists()) {
+          const userData = docSnap.data();
+          // Set user data in the DOM
+          document.getElementById("userName").textContent = userData.username;
+          document
+            .querySelector(".profile-img img")
+            .setAttribute(
+              "src",
+              userData.profileImageUrl || "default-profile.png"
+            ); // Set a default image if URL is null
+
+          // Display user points
+          document.getElementById("dailyPoints").textContent =
+            userData.dailyPoints || 0;
+          document.getElementById("weeklyPoints").textContent =
+            userData.dailyPoints || 0;
+          document.getElementById("monthlyPoints").textContent =
+            userData.dailyPoints || 0;
+          document.getElementById("totalPoints").textContent =
+            userData.dailyPoints || 0;
+        } else {
+          console.log("No user data found!");
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+  } else {
+    console.log("No user is signed in.");
+    // Optionally, redirect to login page
+    // window.location.href = "login.html";
   }
 }
+
+function calculateTotalPoints(userData) {
+  // Calculate the total points by summing daily, weekly, and monthly points
+  return (
+    (userData.dailyPoints || 0) +
+    (userData.weeklyPoints || 0) +
+    (userData.monthlyPoints || 0)
+  );
+}
+
+document.addEventListener("DOMContentLoaded", loadProfileInfo);
 
 function loadRealTimePosts() {
   // Real-time posts loading logic
